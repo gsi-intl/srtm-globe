@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>GSI Tiles on Cesium</title>
+<script src="https://cesiumjs.org/releases/1.25/Build/Cesium/Cesium.js"></script>
+<script src="https://cesiumjs.org/releases/1.25/ThirdParty/requirejs-2.1.20/require.js"></script>
+<script src="./JapanGSITerrainProvider.js"></script>
+<link href="https://cesiumjs.org/releases/1.25/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+<style>
+  #cesiumContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    font-family: sans-serif;
+  }
+  html {
+    height: 100%;
+  }
+  body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+</style>
+</head>
+
+<body>
+<div id="cesiumContainer"></div>
+<script>
+  var viewer = new Cesium.Viewer('cesiumContainer', {
+    imageryProvider: new Cesium.createOpenStreetMapImageryProvider({
+      url: 'http://{s}.gsi.go.jp/xyz/ort/',
+      subdomains:'abc',
+      fileExtension:'jpg',
+      maximumLevel:4,
+      credit: new Cesium.Credit('GSI Tiles', '', 'http://maps.gsi.go.jp/development/ichiran.html')
+    }),
+    terrainProvider:new Cesium.JapanGSITerrainProvider({}),
+    baseLayerPicker: false,
+    geocoder: false,
+    homeButton: false,
+    animation : false,
+    timeline : false,
+    sceneModePicker: false
+  });
+
+viewer.scene.globe.depthTestAgainstTerrain = true;
+viewer.terrainProvider.heightmapTerrainQuality = 0.1;
+viewer.terrainProvider.hasVertexNormals = false;
+viewer.terrainProvider.hasWaterMask = false;
+
+
+viewer.camera.setView({
+   destination : Cesium.Cartesian3.fromDegrees(138.73, 35.26, 15000000.0),
+   orientation: {
+    heading : Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north)
+    pitch : Cesium.Math.toRadians(-90),    // default value (looking down)
+    roll : 0.0                             // default value
+   }
+});
+</script>
+
+</body>
+</html>
